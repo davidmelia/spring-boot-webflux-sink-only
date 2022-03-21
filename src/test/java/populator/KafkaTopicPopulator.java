@@ -2,6 +2,7 @@ package populator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,6 @@ public class KafkaTopicPopulator {
           System.out.println("sending");
           streamBridge.send("fxRates-out-0", kafkaEvent);
           return Mono.just(Map.of("dave", "melia"));
-        }).repeat(100).collectList().map(m -> m.get(0)).block();
+        }).repeat(100).collectList().map(m -> m.get(0)).delayElement(Duration.ofSeconds(5)).block();
   }
 }
