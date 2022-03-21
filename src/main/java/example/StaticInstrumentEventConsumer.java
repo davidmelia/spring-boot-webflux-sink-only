@@ -20,13 +20,11 @@ public class StaticInstrumentEventConsumer {
   @Bean
   public Function<Flux<Message<Map<String, BigDecimal>>>, Mono<Void>> fxRates() {
     return events -> events.flatMapSequential(event -> {
-      System.out.println(event.getHeaders().get("kafka_offset") + "***"+ event.getPayload() + "***");
+      System.out.println("kafka_offset="+event.getHeaders().get("kafka_offset"));
       //ack.acknowledge();
       return Mono
           .defer(() -> Mono.just("A thing"))
-          .doOnNext(r -> log.info("Before delay: {}", r)) // container-0-C-1
-          .delayElement(Duration.ofSeconds(1)) // The delay hands off to another thread, easy WebClient simulation
-          .doOnNext(r -> log.info("After delay: {}", r)) // parallel-1
+          .delayElement(Duration.ofMillis(10)) // The delay hands off to another thread, easy WebClient simulation
           .then();
     }, 1).then();
   }
