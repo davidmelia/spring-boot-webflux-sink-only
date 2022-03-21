@@ -28,6 +28,6 @@ public class KafkaTopicPopulator {
           System.out.println("sending");
           streamBridge.send("fxRates-out-0", kafkaEvent);
           return Mono.just(Map.of("dave", "melia"));
-        }).repeat(10).collectList().map(m -> m.get(0)).block();
+        }).repeat(100).collectList().map(m -> m.get(0)).block();
   }
 }
